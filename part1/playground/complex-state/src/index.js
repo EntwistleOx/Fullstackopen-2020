@@ -20,6 +20,7 @@ const App = () => {
   const [left, setLeft] = useState(0);
   const [right, setRight] = useState(0);
   const [allClicks, setAll] = useState([]);
+  const [value, setVal] = useState(10);
 
   const handleLeftClick = () => {
     setAll(allClicks.concat('L'));
@@ -31,6 +32,23 @@ const App = () => {
     setRight(right + 1);
   };
 
+  // const setValue = (newVal) => {
+  //   const handler = () => {
+  //     setVal(newVal);
+  //   };
+  //   return handler;
+  // };
+
+  // const setValue = (newVal) => {
+  //   return () => {
+  //     setVal(newVal);
+  //   };
+  // };
+
+  const setValue = (newVal) => () => {
+    setVal(newVal);
+  };
+
   return (
     <>
       {left}
@@ -38,6 +56,11 @@ const App = () => {
       {right}
       <Button onClick={handleRightClick} text='Right' />
       <History allClicks={allClicks} />
+      <hr />
+      {value}
+      <button onClick={setValue(1000)}>thousand</button>
+      <button onClick={setValue(0)}>reset</button>
+      <button onClick={setValue(value + 1)}>increment</button>
     </>
   );
 };
