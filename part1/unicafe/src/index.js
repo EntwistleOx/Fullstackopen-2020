@@ -5,9 +5,10 @@ import ReactDOM from 'react-dom';
 
 const Statistic = ({ text, value }) => {
   return (
-    <div>
-      {text}: {value}
-    </div>
+    <tr>
+      <td>{text}:</td>
+      <td>{value}</td>
+    </tr>
   );
 };
 
@@ -36,12 +37,14 @@ const Statistics = ({ statistics }) => {
         'No feedback given'
       ) : (
         <>
-          <Statistic text='good' value={good} />
-          <Statistic text='neutral' value={neutral} />
-          <Statistic text='bad' value={bad} />
-          <Statistic text='all' value={total} />
-          <Statistic text='average' value={average()} />
-          <Statistic text='positive' value={positive()} />
+          <table>
+            <Statistic text='good' value={good} />
+            <Statistic text='neutral' value={neutral} />
+            <Statistic text='bad' value={bad} />
+            <Statistic text='all' value={total} />
+            <Statistic text='average' value={average()} />
+            <Statistic text='positive' value={positive()} />
+          </table>
         </>
       )}
     </>
