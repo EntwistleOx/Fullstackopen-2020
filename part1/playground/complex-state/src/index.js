@@ -58,9 +58,12 @@ const App = () => {
       <History allClicks={allClicks} />
       <hr />
       {value}
-      <button onClick={setValue(1000)}>thousand</button>
+      {/* <button onClick={setValue(1000)}>thousand</button>
       <button onClick={setValue(0)}>reset</button>
-      <button onClick={setValue(value + 1)}>increment</button>
+      <button onClick={setValue(value + 1)}>increment</button> */}
+      <Button onClick={setValue(1000)} text='thousand' />
+      <Button onClick={setValue(0)} text='reset' />
+      <Button onClick={setValue(value + 1)} text='increment' />
     </>
   );
 };
