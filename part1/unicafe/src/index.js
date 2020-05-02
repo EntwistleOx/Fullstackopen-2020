@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom';
 
 // Feedbacks: good, neutral, bad
 
+const Statistic = ({ text, value }) => {
+  return (
+    <div>
+      {text}: {value}
+    </div>
+  );
+};
+
 const Statistics = ({ statistics }) => {
   const good = statistics[0];
   const neutral = statistics[1];
@@ -28,12 +36,12 @@ const Statistics = ({ statistics }) => {
         'No feedback given'
       ) : (
         <>
-          <p>good: {good}</p>
-          <p>neutral: {neutral}</p>
-          <p>bad: {bad}</p>
-          <p>all: {total}</p>
-          <p>average: {average()}</p>
-          <p>positive: {positive()}</p>
+          <Statistic text='good' value={good} />
+          <Statistic text='neutral' value={neutral} />
+          <Statistic text='bad' value={bad} />
+          <Statistic text='all' value={total} />
+          <Statistic text='average' value={average()} />
+          <Statistic text='positive' value={positive()} />
         </>
       )}
     </>
