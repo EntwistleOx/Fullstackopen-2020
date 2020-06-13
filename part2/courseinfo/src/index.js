@@ -29,23 +29,22 @@ const Content = ({ parts }) => {
   );
 };
 
-// const Total = ({ parts }) => {
-//   return (
-//     <>
-//       <p>
-//         Number of exercises{' '}
-//         {parts[0].exercises + parts[1].exercises + parts[2].exercises}
-//       </p>
-//     </>
-//   );
-// };
+const Total = ({ parts }) => {
+  return (
+    <>
+      <p>
+        Number of exercises {parts.reduce((sum, cur) => sum + cur.exercises, 0)}
+      </p>
+    </>
+  );
+};
 
 const Course = ({ course }) => {
   return (
     <>
       <Header course={course.name} />
       <Content parts={course.parts} />
-      {/* <Total parts={course.parts} /> */}
+      <Total parts={course.parts} />
     </>
   );
 };
@@ -69,6 +68,11 @@ const App = () => {
         id: 3,
         name: 'State of a component',
         exercises: 14,
+      },
+      {
+        id: 4,
+        name: 'Redux',
+        exercises: 18,
       },
     ],
   };
