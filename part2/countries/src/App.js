@@ -23,7 +23,6 @@ const Countries = ({ countries }) => {
 
 const Countrie = ({ countrie, single }) => {
   const [show, setShow] = useState(false);
-  console.log(show);
 
   const handleClick = () => {
     setShow(!show);
@@ -51,7 +50,8 @@ const CountrieInfo = ({ countrie }) => {
       <p>Population: {countrie.population}</p>
       <h2>Languages</h2>
       <Languages languages={countrie.languages} />
-      <Flag flag={countrie.flag} />
+      <Img img={countrie.flag} />
+      <Weather capital={countrie.capital} />
       <hr />
     </>
   );
@@ -71,8 +71,41 @@ const Language = ({ language }) => {
   return <li>{language}</li>;
 };
 
-const Flag = ({ flag }) => {
-  return <img src={flag} alt='flag' width='100px' />;
+const Img = ({ img }) => {
+  return <img src={img} alt='flag' width='100px' />;
+};
+
+const Weather = ({ capital }) => {
+  const [weather, setWeather] = useState({});
+  useEffect(() => {
+    axios
+      .get(
+        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${capital}&unit=m`
+      )
+      .then((weather) => {
+        setWeather(weather.data);
+      });
+  }, []);
+
+  console.log(weather);
+
+  return (
+    <>
+      {Object.keys(weather).length === 0 || weather.error ? (
+        <h2>'Cargando...'</h2>
+      ) : (
+        <>
+          <h2>Weather in {capital}</h2>
+          <p>Temprature: {weather.current.temperature}° Celsius</p>
+          <p>
+            Wind: {weather.current.wind_speed}Km/hr, direction{' '}
+            {weather.current.wind_dir}
+          </p>
+          <Img img={weather.current.weather_icons} />
+        </>
+      )}
+    </>
+  );
 };
 
 const App = () => {
@@ -92,7 +125,6 @@ const App = () => {
     });
     setSearch(searched);
   };
-
   return (
     <>
       <h1>Countries Finder</h1>
