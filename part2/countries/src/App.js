@@ -22,9 +22,23 @@ const Countries = ({ countries }) => {
 };
 
 const Countrie = ({ countrie, single }) => {
+  const [show, setShow] = useState(false);
+  console.log(show);
+
+  const handleClick = () => {
+    setShow(!show);
+  };
   return (
     <>
-      {single ? <CountrieInfo countrie={countrie} /> : <dt>{countrie.name}</dt>}
+      {single ? (
+        <CountrieInfo countrie={countrie} />
+      ) : (
+        <dt>
+          {countrie.name}{' '}
+          <input type='button' value='show' onClick={handleClick} />
+          {show && <CountrieInfo countrie={countrie} />}
+        </dt>
+      )}
     </>
   );
 };
@@ -38,6 +52,7 @@ const CountrieInfo = ({ countrie }) => {
       <h2>Languages</h2>
       <Languages languages={countrie.languages} />
       <Flag flag={countrie.flag} />
+      <hr />
     </>
   );
 };
