@@ -1,17 +1,20 @@
-import React, { useState } from "react";
-import axios from "axios";
-import Note from "./components/Note";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Note from './components/Note';
 
-const App = (props) => {
-  const promise = axios.get("http://localhost:3001/notes");
-  console.log(promise);
-
-  const promise2 = axios.get("http://localhost:3001/foobar");
-  console.log(promise2);
-
-  const [notes, setNotes] = useState(props.notes);
-  const [newNote, setNewNote] = useState("a new note...");
+const App = () => {
+  const [notes, setNotes] = useState([]);
+  const [newNote, setNewNote] = useState('a new note...');
   const [showAll, setShowAll] = useState(true);
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/notes').then((response) => {
+      console.log('promise fulfilled');
+      setNotes(response.data);
+    });
+  }, []);
+
+  console.log('render', notes.length, 'notes');
 
   const addNote = (event) => {
     event.preventDefault();
@@ -23,7 +26,7 @@ const App = (props) => {
     };
 
     setNotes(notes.concat(noteObject));
-    setNewNote("");
+    setNewNote('');
   };
 
   const handleNoteChange = (event) => {
@@ -40,7 +43,7 @@ const App = (props) => {
       <h1>Notes</h1>
       <div>
         <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? "important" : "all"}
+          show {showAll ? 'important' : 'all'}
         </button>
       </div>
       <ul>
@@ -50,7 +53,7 @@ const App = (props) => {
       </ul>
       <form onSubmit={addNote}>
         <input value={newNote} onChange={handleNoteChange} />
-        <button type="submit">save</button>
+        <button type='submit'>save</button>
       </form>
     </div>
   );

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Filter = ({ onFilter }) => {
   return (
@@ -24,7 +25,7 @@ const PersonForm = ({
         number: <input value={newNumber} onChange={handleChangePhone} />
       </div>
       <div>
-        <button type="submit">add</button>
+        <button type='submit'>add</button>
       </div>
     </form>
   );
@@ -38,10 +39,11 @@ const Person = ({ person }) => {
   );
 };
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons, filter }) => {
+  const data = filter.length ? filter : persons;
   return (
     <>
-      {persons.map((person) => (
+      {data.map((person) => (
         <Person key={person.name} person={person} />
       ))}
     </>
@@ -49,15 +51,16 @@ const Persons = ({ persons }) => {
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
-  const [filter, setFilter] = useState(persons);
+  const [filter, setFilter] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -88,6 +91,9 @@ const App = () => {
     setFilter(filtered);
   };
 
+  console.log('gente', persons);
+  console.log('filtro', filter);
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -103,7 +109,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={filter} />
+      <Persons persons={persons} filter={filter} />
     </div>
   );
 };
