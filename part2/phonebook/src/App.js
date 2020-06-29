@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import personsService from './services/persons';
+
 const Filter = ({ onFilter }) => {
   return (
     <div>
@@ -65,14 +67,15 @@ const App = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const found = persons.find((person) => person.name === newName);
-
     if (found) {
       alert(`${newName} is already added`);
     } else {
-      setPersons(persons.concat({ name: newName, number: newNumber }));
-      setFilter(filter.concat({ name: newName, number: newNumber }));
-      setNewName('');
-      setNewNumber('');
+      const newPerson = { name: newName, number: newNumber };
+      personsService.create(newPerson).then((response) => {
+        setPersons(persons.concat(response));
+        setNewName('');
+        setNewNumber('');
+      });
     }
   };
 
@@ -90,9 +93,6 @@ const App = () => {
     });
     setFilter(filtered);
   };
-
-  console.log('gente', persons);
-  console.log('filtro', filter);
 
   return (
     <div>
