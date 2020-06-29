@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
+import Notification from './components/Notificacion';
 import personsService from './services/persons';
-import Axios from 'axios';
 
 const Filter = ({ onFilter }) => {
   return (
@@ -58,6 +57,10 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState([]);
+  const [notification, setNotification] = useState({
+    message: null,
+    style: null,
+  });
 
   useEffect(() => {
     personsService.getAll().then((response) => {
@@ -82,6 +85,13 @@ const App = () => {
           );
           setNewName('');
           setNewNumber('');
+          setNotification({
+            message: `${response.name} was updated`,
+            style: 'success',
+          });
+          setTimeout(() => {
+            setNotification({ message: null, style: null });
+          }, 5000);
         });
       }
     } else {
@@ -89,6 +99,13 @@ const App = () => {
         setPersons(persons.concat(response));
         setNewName('');
         setNewNumber('');
+        setNotification({
+          message: `${response.name} was added`,
+          style: 'success',
+        });
+        setTimeout(() => {
+          setNotification({ message: null, style: null });
+        }, 5000);
       });
     }
   };
@@ -111,16 +128,35 @@ const App = () => {
   const onRemove = (person) => {
     const result = window.confirm(`Delete ${person.name}?`);
     if (result)
-      personsService.remove(person.id).then((response) => {
-        setPersons(persons.filter((p) => p.id !== person.id));
-      });
+      personsService
+        .remove(person.id)
+        .then((response) => {
+          setPersons(persons.filter((p) => p.id !== person.id));
+          setNotification({
+            message: `${person.name} was removed`,
+            style: 'success',
+          });
+          setTimeout(() => {
+            setNotification({ message: null, style: null });
+          }, 5000);
+        })
+        .catch((error) => {
+          setNotification({
+            message: `${person.name} was already removed`,
+            style: 'error',
+          });
+          setTimeout(() => {
+            setNotification({ message: null, style: null });
+          }, 5000);
+          setPersons(persons.filter((p) => p.id !== person.id));
+        });
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notification} />
       <Filter onFilter={onFilter} />
-
       <h2>Add new</h2>
       <PersonForm
         onSubmit={onSubmit}
