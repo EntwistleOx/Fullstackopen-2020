@@ -1,6 +1,6 @@
 # FullStackOpen 2020 🖖👽
 
-## My solutions for Fullstackopen 2020 🤖👾✌
+## My solutions for (Fullstackopen 2020)[https://fullstackopen.com/] 🤖👾✌
 
 - [x] Part 0: Fundamentals of Web apps (6 exercises / 2 hours)
 - [x] Part 1: Introduction to React (14 exercises / 5 hours)
