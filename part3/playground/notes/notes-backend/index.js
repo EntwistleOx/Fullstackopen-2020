@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
 
 let notes = [
@@ -22,11 +24,12 @@ let notes = [
   },
 ];
 
+app.use(cors());
 app.use(express.json());
 
 const genId = () => {
   const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
-  return maxId;
+  return maxId + 1;
 };
 
 app.get('/', (req, res) => {
@@ -34,7 +37,6 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/notes', (req, res) => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
   const body = req.body;
 
   if (!body.content) {
@@ -44,13 +46,13 @@ app.post('/api/notes', (req, res) => {
   }
 
   const note = {
+    id: genId(),
     content: body.content,
     important: body.important || false,
     date: new Date(),
-    id: genId(),
   };
   notes = notes.concat(note);
-  res.json(notes);
+  res.json(note);
 });
 
 app.get('/api/notes', (req, res) => {
