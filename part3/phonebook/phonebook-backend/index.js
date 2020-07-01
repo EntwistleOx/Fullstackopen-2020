@@ -85,6 +85,10 @@ app.post('/api/persons', (req, res) => {
   res.json(person);
 });
 
+app.get('/', (req, res) => {
+  res.send('<h1>Hello Human 🖖👽</h1>');
+});
+
 app.get('/api/persons', (req, res) => {
   res.json(persons);
 });
