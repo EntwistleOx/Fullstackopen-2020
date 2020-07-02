@@ -23,14 +23,14 @@ const App = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const newPerson = { name: newName, number: newNumber };
+    const personData = { name: newName, number: newNumber };
     const found = persons.find((person) => person.name === newName);
     if (found) {
       const result = window.confirm(
         `${found.name} is already added, replace the old number with this new one?`
       );
       if (result) {
-        personsService.update(found.id, newPerson).then((response) => {
+        personsService.update(found.id, personData).then((response) => {
           setPersons(
             persons.map((person) =>
               person.id === found.id ? response : person
@@ -48,7 +48,7 @@ const App = () => {
         });
       }
     } else {
-      personsService.create(newPerson).then((response) => {
+      personsService.create(personData).then((response) => {
         setPersons(persons.concat(response));
         setNewName('');
         setNewNumber('');
