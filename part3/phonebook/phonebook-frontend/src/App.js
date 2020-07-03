@@ -30,36 +30,58 @@ const App = () => {
         `${found.name} is already added, replace the old number with this new one?`
       );
       if (result) {
-        personsService.update(found.id, personData).then((response) => {
-          setPersons(
-            persons.map((person) =>
-              person.id === found.id ? response : person
-            )
-          );
+        personsService
+          .update(found.id, personData)
+          .then((response) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === found.id ? response : person
+              )
+            );
+            setNewName('');
+            setNewNumber('');
+            setNotification({
+              message: `${response.name} was updated`,
+              style: 'success',
+            });
+            setTimeout(() => {
+              setNotification({ message: null, style: null });
+            }, 5000);
+          })
+          .catch((error) => {
+            setNotification({
+              message: `${error.response.data.error}`,
+              style: 'error',
+            });
+            setTimeout(() => {
+              setNotification({ message: null, style: null });
+            }, 5000);
+          });
+      }
+    } else {
+      personsService
+        .create(personData)
+        .then((response) => {
+          setPersons(persons.concat(response));
           setNewName('');
           setNewNumber('');
           setNotification({
-            message: `${response.name} was updated`,
+            message: `${response.name} was added`,
             style: 'success',
           });
           setTimeout(() => {
             setNotification({ message: null, style: null });
           }, 5000);
+        })
+        .catch((error) => {
+          setNotification({
+            message: `${error.response.data.error}`,
+            style: 'error',
+          });
+          setTimeout(() => {
+            setNotification({ message: null, style: null });
+          }, 5000);
         });
-      }
-    } else {
-      personsService.create(personData).then((response) => {
-        setPersons(persons.concat(response));
-        setNewName('');
-        setNewNumber('');
-        setNotification({
-          message: `${response.name} was added`,
-          style: 'success',
-        });
-        setTimeout(() => {
-          setNotification({ message: null, style: null });
-        }, 5000);
-      });
     }
   };
 

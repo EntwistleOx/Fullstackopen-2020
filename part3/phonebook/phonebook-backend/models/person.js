@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
+const uniqVal = require('mongoose-unique-validator');
 
 const url = process.env.MONGODB_URI;
 
 console.log('connecting to', url);
 
 mongoose
-  .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then((result) => {
     console.log('connected to MongoDB');
   })
@@ -13,12 +18,24 @@ mongoose
     console.log('error connecting to MongoDB:', error.message);
   });
 
-const noteSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+const phoneBookSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    index: true,
+    unique: true,
+    minlength: 3,
+  },
+  number: {
+    type: String,
+    required: true,
+    index: true,
+    unique: true,
+    minlength: 8,
+  },
 });
 
-noteSchema.set('toJSON', {
+phoneBookSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
@@ -26,4 +43,6 @@ noteSchema.set('toJSON', {
   },
 });
 
-module.exports = mongoose.model('Person', noteSchema);
+phoneBookSchema.plugin(uniqVal);
+
+module.exports = mongoose.model('Person', phoneBookSchema);
