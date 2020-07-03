@@ -5,7 +5,7 @@
 - [x] Part 0: Fundamentals of Web apps (6 exercises / 2 hours)
 - [x] Part 1: Introduction to React (14 exercises / 5 hours)
 - [x] Part 2: Communicating with server (20 exercises / 8 hours)
-- [ ] Part 3: Programming a server with NodeJS and Express
+- [x] Part 3: Programming a server with NodeJS and Express (22 exercises / 14 hours)
 - [ ] Part 4: Testing Express servers, user administration
 - [ ] Part 5: Testing React apps
 - [ ] Part 6: State management with Redux
