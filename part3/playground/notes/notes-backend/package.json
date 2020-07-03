@@ -10,7 +10,8 @@
     "build:ui": "rm -rf build && cd ../notes-frontend/ && npm run build --prod && cp -r build ../notes-backend/",
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
   },
   "author": "Juan Díaz",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "mongoose": "^5.9.20"
   },
   "devDependencies": {
+    "eslint": "^7.3.1",
     "nodemon": "^2.0.4"
   }
 }

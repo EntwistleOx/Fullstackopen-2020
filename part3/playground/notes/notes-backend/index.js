@@ -33,7 +33,7 @@ app.post('/api/notes', (req, res, next) => {
     .catch((error) => next(error));
 });
 
-app.get('/api/notes', (req, res) => {
+app.get('/api/notes', (req, res, next) => {
   Note.find({})
     .then((notes) => {
       res.json(notes);
@@ -76,7 +76,7 @@ app.delete('/api/notes/:id', (req, res, next) => {
   // notes = notes.filter((note) => note.id !== id);
   // res.status(204).end();
   Note.findByIdAndRemove(id)
-    .then((result) => {
+    .then(() => {
       res.status(204).end();
     })
     .catch((error) => next(error));

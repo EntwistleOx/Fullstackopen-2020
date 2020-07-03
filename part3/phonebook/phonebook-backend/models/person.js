@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const uniqVal = require('mongoose-unique-validator');
 
@@ -11,7 +12,7 @@ mongoose
     useUnifiedTopology: true,
     useCreateIndex: true,
   })
-  .then((result) => {
+  .then(() => {
     console.log('connected to MongoDB');
   })
   .catch((error) => {
@@ -37,9 +38,10 @@ const phoneBookSchema = new mongoose.Schema({
 
 phoneBookSchema.set('toJSON', {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString();
-    delete returnedObject._id;
-    delete returnedObject.__v;
+    const obj = returnedObject;
+    obj.id = obj._id.toString();
+    delete obj._id;
+    delete obj.__v;
   },
 });
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 if (process.argv.length < 3) {
   console.log(
+    // eslint-disable-next-line comma-dangle
     'Please provide the password as an argument: node mongo.js <password>'
   );
   process.exit(1);
@@ -30,13 +31,13 @@ const person = new Person({
 if (process.argv.length === 3) {
   Person.find({}).then((result) => {
     console.log('Phonebook:');
-    result.forEach((person) => {
-      console.log(person);
+    result.forEach((p) => {
+      console.log(p);
     });
     mongoose.connection.close();
   });
 } else {
-  person.save().then((result) => {
+  person.save().then(() => {
     console.log(`added ${name} number ${person.number} to phonebook`);
     mongoose.connection.close();
   });

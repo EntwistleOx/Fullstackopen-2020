@@ -34,7 +34,7 @@ Note.find({ important: true }).then((result) => {
   mongoose.connection.close();
 });
 
-note.save().then((result) => {
+note.save().then(() => {
   console.log('note saved!');
   mongoose.connection.close();
 });
