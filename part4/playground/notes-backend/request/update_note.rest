@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/notes/5efc283695a64503d00af7df
+Content-Type: application/json
+
+{
+    "content": "Postman or Insomnia",
+    "important": false
+}
