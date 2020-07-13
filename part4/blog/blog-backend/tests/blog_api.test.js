@@ -59,7 +59,11 @@ test('blog identifier field is id', async () => {
 });
 
 test('a blog can be added', async () => {
-  await api.post('/api/blogs').send(newBlog).expect(201);
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
 
   const blogs = await api.get('/api/blogs');
   expect(blogs.body).toHaveLength(initialData.length + 1);
@@ -76,6 +80,41 @@ test('if likes property is missing default will be zero', async () => {
 
 test('bad request if title and url properties are missing', async () => {
   await api.post('/api/blogs').send(newBlogNoTitle).expect(400);
+});
+
+test('can update a note with valid id', async () => {
+  const blogs = await api.get('/api/blogs');
+  const blogToUpdate = blogs.body[0];
+
+  const dataToUpdate = {
+    author: 'Mr Michael Chan',
+  };
+
+  const updatedBlog = await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(dataToUpdate)
+    .expect(200)
+    .expect('Content-Type', /application\/json/);
+
+  const blogsAfterUpdate = await api.get('/api/blogs');
+  const contents = blogsAfterUpdate.body.map((blog) => blog.author);
+
+  expect(contents).toContain(updatedBlog.body.author);
+});
+
+test('can delete a note', async () => {
+  const blogsAtStart = await api.get('/api/blogs');
+  const blogToDelete = blogsAtStart.body[0];
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+
+  const blogsAtEnd = await api.get('/api/blogs');
+
+  expect(blogsAtEnd.body).toHaveLength(initialData.length - 1);
+
+  const contents = blogsAtEnd.body.map((blog) => blog.title);
+
+  expect(contents).not.toContain(blogToDelete.title);
 });
 
 afterAll(() => {

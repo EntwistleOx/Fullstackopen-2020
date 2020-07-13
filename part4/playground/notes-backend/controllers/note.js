@@ -29,20 +29,21 @@ notesRouter.post('/', async (req, res) => {
   res.json(savedNote);
 });
 
-notesRouter.put('/:id', (req, res) => {
-  const body = req.body;
-  const id = req.params.id;
+notesRouter.put('/:id', (req, res, next) => {
+  try {
+    const body = req.body;
+    const id = req.params.id;
 
-  const note = {
-    content: body.content,
-    important: body.important,
-  };
+    const note = {
+      content: body.content,
+      important: body.important,
+    };
 
-  Note.findByIdAndUpdate(id, note, { new: true })
-    .then((updatedNote) => {
-      res.json(updatedNote);
-    })
-    .catch((error) => next(error));
+    const updatedNote = Note.findByIdAndUpdate(id, note, { new: true });
+    res.json(updatedNote);
+  } catch (error) {
+    next(error);
+  }
 });
 
 notesRouter.delete('/:id', async (req, res) => {
