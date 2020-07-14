@@ -6,7 +6,9 @@ require('express-async-errors');
 const config = require('./utils/config');
 const logger = require('./utils/logger');
 const middleware = require('./utils/middleware');
+const usersRouter = require('./controllers/users');
 const notesRouter = require('./controllers/note');
+const loginRouter = require('./controllers/login');
 
 const app = express();
 
@@ -33,7 +35,10 @@ app.get('/', (req, res) => {
   res.send('Hello humans! 👽');
 });
 
+app.use('/api/users', usersRouter);
 app.use('/api/notes', notesRouter);
+app.use('/api/login', loginRouter);
+
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
