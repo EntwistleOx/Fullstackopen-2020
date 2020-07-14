@@ -6,7 +6,7 @@
 - [x] Part 1: Introduction to React (14 exercises / 5 hours)
 - [x] Part 2: Communicating with server (20 exercises / 8 hours)
 - [x] Part 3: Programming a server with NodeJS and Express (22 exercises / 14 hours)
-- [ ] Part 4: Testing Express servers, user administration
+- [x] Part 4: Testing Express servers, user administration (22 exercises / 19 hours)
 - [ ] Part 5: Testing React apps
 - [ ] Part 6: State management with Redux
 - [ ] Part 7: React router, custom hooks, styling app with CSS and webpack
