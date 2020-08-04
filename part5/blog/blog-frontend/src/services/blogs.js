@@ -13,7 +13,6 @@ const getAll = async () => {
 };
 
 const createBlog = async (newBlog) => {
-  console.log(token);
   const header = {
     headers: { Authorization: token },
   };
@@ -21,4 +20,12 @@ const createBlog = async (newBlog) => {
   return response.data;
 };
 
-export default { getAll, createBlog, setToken };
+const likeBlog = async (id, blog) => {
+  const header = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.put(`${baseUrl}/${id}`, blog, header);
+  return response.data;
+};
+
+export default { getAll, createBlog, likeBlog, setToken };
