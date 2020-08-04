@@ -29,7 +29,6 @@ const App = () => {
   useEffect(() => {
     async function fetchData() {
       const fetchBlogs = await blogService.getAll();
-      // setBlogs(fetchBlogs);
       sortBlogs(fetchBlogs);
     }
     fetchData();
@@ -44,10 +43,7 @@ const App = () => {
     e.preventDefault();
     try {
       const login = await loginService.login({ username, password });
-
       window.localStorage.setItem('leggedInUser', JSON.stringify(login));
-
-      console.log(login.token);
       blogService.setToken(login.token);
       setUser(login);
       setUsername('');
@@ -95,7 +91,7 @@ const App = () => {
     }, 3000);
   };
 
-  const likeABlog = async (id, likedBlog) => {
+  const likeBlog = async (id, likedBlog) => {
     const response = await blogService.likeBlog(id, likedBlog);
 
     // setBlogs(
@@ -123,6 +119,24 @@ const App = () => {
     }, 3000);
   };
 
+  const deleteBlog = async (id) => {
+    await blogService.deleteBlog(id);
+
+    setBlogs(
+      blogs.filter((blog) => {
+        return blog.id !== id;
+      })
+    );
+
+    setMsg({
+      message: `removed ok`,
+      style: 'success',
+    });
+    setTimeout(() => {
+      setMsg(null);
+    }, 3000);
+  };
+
   const blogForm = () => {
     return (
       <Toggable buttonLabel={'new blog'}>
@@ -139,7 +153,7 @@ const App = () => {
           <input type='button' value='log out' onClick={handleLogout} />
         </p>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} likeABlog={likeABlog} />
+          <Blog key={blog.id} blog={blog} like={likeBlog} remove={deleteBlog} />
         ))}
       </Fragment>
     );

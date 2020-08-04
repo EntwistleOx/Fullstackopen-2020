@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 
-const Blog = ({ blog, likeABlog }) => {
+const Blog = ({ blog, like, remove }) => {
   const [show, setShow] = useState(false);
 
   const handleOnClick = () => {
@@ -11,8 +11,15 @@ const Blog = ({ blog, likeABlog }) => {
       title: blog.title,
       url: blog.url,
     };
-    likeABlog(blog.id, likedBlog);
+    like(blog.id, likedBlog);
   };
+
+  const handleDelete = () => {
+    if (window.confirm(`do you want to remove ${blog.title}`)) {
+      remove(blog.id);
+    }
+  };
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -20,6 +27,7 @@ const Blog = ({ blog, likeABlog }) => {
     borderWidth: 1,
     marginBottom: 5,
   };
+
   return (
     <div style={blogStyle}>
       {blog.title}{' '}
@@ -37,6 +45,8 @@ const Blog = ({ blog, likeABlog }) => {
           <input type='button' value='likes' onClick={handleOnClick} />
           <br />
           {blog.user.name}
+          <br />
+          <input type='button' value='delete' onClick={handleDelete} />
         </Fragment>
       )}
     </div>
