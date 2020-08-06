@@ -4,6 +4,7 @@ import React, {
   forwardRef,
   Fragment,
 } from 'react';
+import PropTypes from 'prop-types';
 
 const Toggable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
@@ -31,5 +32,11 @@ const Toggable = forwardRef((props, ref) => {
     </Fragment>
   );
 });
+
+Toggable.displayName = 'Toggable';
+
+Toggable.propTypes = {
+  buttonLabel: PropTypes.string.isRequired,
+};
 
 export default Toggable;

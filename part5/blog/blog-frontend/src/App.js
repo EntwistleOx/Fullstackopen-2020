@@ -129,7 +129,7 @@ const App = () => {
     );
 
     setMsg({
-      message: `removed ok`,
+      message: 'removed ok',
       style: 'success',
     });
     setTimeout(() => {

@@ -1,12 +1,13 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
-function LoginForm({
+const LoginForm = ({
   handleLogin,
   handleUsernameChange,
   handlePasswordChange,
   username,
   password,
-}) {
+}) => {
   return (
     <Fragment>
       <h2>login</h2>
@@ -33,6 +34,14 @@ function LoginForm({
       </form>
     </Fragment>
   );
-}
+};
+
+LoginForm.prototype = {
+  handleLogin: PropTypes.string.isRequired,
+  handleUsernameChange: PropTypes.func.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+};
 
 export default LoginForm;
