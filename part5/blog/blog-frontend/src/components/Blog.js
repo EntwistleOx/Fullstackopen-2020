@@ -30,8 +30,8 @@ const Blog = ({ blog, like, remove }) => {
   };
 
   return (
-    <div style={blogStyle}>
-      {blog.title}{' '}
+    <div style={blogStyle} className='blog'>
+      {blog.title} | {blog.author}
       <input
         type='button'
         onClick={() => setShow(!show)}
@@ -39,16 +39,21 @@ const Blog = ({ blog, like, remove }) => {
       />{' '}
       <br />
       {show && (
-        <Fragment>
-          {blog.url} | {blog.author}
+        <div className='blogInfo'>
+          {blog.url}
           <br />
           likes: {blog.likes}{' '}
-          <input type='button' value='likes' onClick={handleOnClick} />
+          <input
+            type='button'
+            value='likes'
+            className='btnLikes'
+            onClick={handleOnClick}
+          />
           <br />
           {blog.user.name}
           <br />
           <input type='button' value='delete' onClick={handleDelete} />
-        </Fragment>
+        </div>
       )}
     </div>
   );
