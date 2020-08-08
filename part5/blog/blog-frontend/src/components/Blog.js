@@ -32,23 +32,16 @@ const Blog = ({ blog, like, remove }) => {
   return (
     <div style={blogStyle} className='blog'>
       {blog.title} | {blog.author}
-      <input
-        type='button'
-        onClick={() => setShow(!show)}
-        value={show ? 'hide' : 'view'}
-      />{' '}
+      <button onClick={() => setShow(!show)}>{show ? 'hide' : 'view'}</button>
       <br />
       {show && (
         <div className='blogInfo'>
           {blog.url}
           <br />
           likes: {blog.likes}{' '}
-          <input
-            type='button'
-            value='likes'
-            className='btnLikes'
-            onClick={handleOnClick}
-          />
+          <button type='button' className='btnLikes' onClick={handleOnClick}>
+            likes
+          </button>
           <br />
           {blog.user.name}
           <br />

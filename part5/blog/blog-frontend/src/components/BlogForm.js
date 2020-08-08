@@ -55,7 +55,7 @@ function BlogForm({ createNewBlog }) {
           onChange={handleBlogsOnChange}
         />
       </div>
-      <input type='submit' value='create' />
+      <input id='createBlogBtn' type='submit' value='create' />
     </form>
   );
 }

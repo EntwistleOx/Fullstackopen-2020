@@ -7,7 +7,8 @@
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
-    "test": "NODE_ENV=test jest --verbose  --runInBand"
+    "test": "NODE_ENV=test jest --verbose  --runInBand",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "author": "Juan Díaz",
   "license": "ISC",
@@ -21,6 +22,7 @@
     "mongoose-unique-validator": "^2.0.3"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "eslint": "^7.4.0",
     "jest": "^26.1.0",
     "nodemon": "^2.0.4",
