@@ -1,12 +1,18 @@
 describe('Blog App', function () {
   beforeEach(function () {
     cy.request('POST', 'http://localhost:3001/api/testing/reset');
-    const user = {
+    const user1 = {
       name: 'Juan Díaz',
       username: 'juand',
       password: 'password',
     };
-    cy.request('POST', 'http://localhost:3001/api/users/', user);
+    cy.request('POST', 'http://localhost:3001/api/users/', user1);
+    const user2 = {
+      name: 'Fran Carrasco',
+      username: 'franc',
+      password: 'password',
+    };
+    cy.request('POST', 'http://localhost:3001/api/users/', user2);
     cy.visit('http://localhost:3000');
   });
 
@@ -36,7 +42,7 @@ describe('Blog App', function () {
     });
   });
 
-  describe.only('When logged in', function () {
+  describe('When logged in', function () {
     beforeEach(function () {
       cy.login({ username: 'juand', password: 'password' });
     });
@@ -69,11 +75,69 @@ describe('Blog App', function () {
         });
       });
 
-      it.only('A user can like a blog', function () {
+      it('A user can like a blog', function () {
         cy.contains('I Robot').contains('view').click();
         cy.contains('I Robot').get('.blogInfo').get('.btnLikes').click();
         cy.contains('I Robot').get('.blogInfo').contains('likes: 1');
       });
+
+      it('blog are aordered by most likes', function () {
+        cy.contains('Jurassic Park').contains('view').click();
+        cy.contains('Jurassic Park').get('.blogInfo').get('.btnLikes').click();
+        cy.wait(1000);
+        cy.contains('Jurassic Park').get('.blogInfo').get('.btnLikes').click();
+
+        cy.contains('Batman').contains('view').click();
+        cy.contains('Batman')
+          .get('.blogInfo')
+          .get('.btnLikes')
+          .click({ multiple: true });
+
+        cy.contains('I Robot').contains('view').click();
+
+        cy.get('.blog').then((blog) => {
+          cy.wrap(blog[0]).contains('likes: 2');
+          cy.wrap(blog[1]).contains('likes: 1');
+          cy.wrap(blog[2]).contains('likes: 0');
+        });
+      });
+    });
+
+    describe('when a user create a blog', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'Batman: Year One',
+          author: 'Frank Miller',
+          url: 'www.batmanzero.com',
+        });
+      });
+
+      it('can delete his own blog', function () {
+        cy.contains('Batman').contains('view').click();
+        cy.contains('Batman').get('.blogInfo').get('.btnDelete').click();
+        cy.get('.success').should('contain', 'removed ok');
+        cy.should('not.contain', 'Batman');
+      });
+    });
+  });
+
+  describe('when a user create some blog', function () {
+    beforeEach(function () {
+      cy.login({ username: 'juand', password: 'password' });
+      cy.createBlog({
+        title: 'Batman: Year One',
+        author: 'Frank Miller',
+        url: 'www.batmanzero.com',
+      });
+      cy.cleanLocalStorage();
+      cy.login({ username: 'franc', password: 'password' });
+    });
+
+    it('another user cant delete someone else blog', function () {
+      cy.contains('Batman').contains('view').click();
+      cy.contains('Batman').get('.blogInfo').get('.btnDelete').click();
+      cy.get('.error').should('contain', 'only owner can delete this blog');
+      cy.contains('Batman');
     });
   });
 });

@@ -39,13 +39,15 @@ const Blog = ({ blog, like, remove }) => {
           {blog.url}
           <br />
           likes: {blog.likes}{' '}
-          <button type='button' className='btnLikes' onClick={handleOnClick}>
+          <button className='btnLikes' onClick={handleOnClick}>
             likes
           </button>
           <br />
           {blog.user.name}
           <br />
-          <input type='button' value='delete' onClick={handleDelete} />
+          <button className='btnDelete' onClick={handleDelete}>
+            delete
+          </button>
         </div>
       )}
     </div>

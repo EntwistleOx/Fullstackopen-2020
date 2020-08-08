@@ -120,14 +120,24 @@ const App = () => {
   };
 
   const deleteBlog = async (id) => {
-    await blogService.deleteBlog(id);
+    const delBlog = await blogService.deleteBlog(id);
+
+    if (delBlog.error) {
+      setMsg({
+        message: delBlog.error,
+        style: 'error',
+      });
+      setTimeout(() => {
+        setMsg(null);
+      }, 3000);
+      return;
+    }
 
     setBlogs(
       blogs.filter((blog) => {
         return blog.id !== id;
       })
     );
-
     setMsg({
       message: 'removed ok',
       style: 'success',
