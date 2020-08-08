@@ -50,7 +50,9 @@ notesRouter.post('/', async (req, res) => {
   res.json(savedNote);
 });
 
-notesRouter.put('/:id', (req, res, next) => {
+notesRouter.put('/:id', async (req, res, next) => {
+  console.log(req.body);
+  console.log(req.params);
   try {
     const body = req.body;
     const id = req.params.id;
@@ -60,7 +62,7 @@ notesRouter.put('/:id', (req, res, next) => {
       important: body.important,
     };
 
-    const updatedNote = Note.findByIdAndUpdate(id, note, { new: true });
+    const updatedNote = await Note.findByIdAndUpdate(id, note, { new: true });
     res.json(updatedNote);
   } catch (error) {
     next(error);

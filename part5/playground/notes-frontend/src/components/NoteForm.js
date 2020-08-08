@@ -13,7 +13,7 @@ function NoteForm({ createNote }) {
     createNote({
       content: newNote,
       date: new Date().toISOString(),
-      important: Math.random() < 0.5,
+      important: false,
     });
 
     setNewNote('');
@@ -23,8 +23,10 @@ function NoteForm({ createNote }) {
     <div className='formDiv'>
       <h2>create a new note</h2>
       <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} />
-        <button type='submit'>save</button>
+        <input id='new-note' value={newNote} onChange={handleNoteChange} />
+        <button id='create-note' type='submit'>
+          save
+        </button>
       </form>
     </div>
   );

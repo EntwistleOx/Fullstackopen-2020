@@ -9,6 +9,7 @@ import Toggable from './components/Toggable';
 
 import noteService from './services/notes';
 import loginService from './services/login';
+import { Fragment } from 'react';
 
 const App = () => {
   const [notes, setNotes] = useState([]);
@@ -18,7 +19,8 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
 
-  const noteFormRef = useRef();
+  // const noteFormRef = useRef();
+  const noteFormRef = React.createRef();
 
   useEffect(() => {
     noteService.getAll().then((response) => {
@@ -34,28 +36,6 @@ const App = () => {
       noteService.setToken(user.token);
     }
   }, []);
-
-  const loginForm = () => {
-    return (
-      <Toggable buttonLabel='login'>
-        <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleLogin={handleLogin}
-        />
-      </Toggable>
-    );
-  };
-
-  const noteForm = () => {
-    return (
-      <Toggable buttonLabel='new note' ref={noteFormRef}>
-        <NoteForm createNote={addNote} />
-      </Toggable>
-    );
-  };
 
   const addNote = (noteObject) => {
     noteFormRef.current.toggleVisibility();
@@ -86,6 +66,28 @@ const App = () => {
     }
   };
 
+  const loginForm = () => {
+    return (
+      <Toggable buttonLabel='login'>
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleLogin={handleLogin}
+        />
+      </Toggable>
+    );
+  };
+
+  const noteForm = () => {
+    return (
+      <Toggable buttonLabel='new note' ref={noteFormRef}>
+        <NoteForm createNote={addNote} />
+      </Toggable>
+    );
+  };
+
   const notesToShow = showAll
     ? notes
     : notes.filter((note) => note.important === true);
@@ -113,9 +115,17 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+
       <Notification message={errorMessage} />
 
-      {user === null ? loginForm() : noteForm()}
+      {user === null ? (
+        loginForm()
+      ) : (
+        <Fragment>
+          <p>{user.name} logged in</p>
+          {noteForm()}
+        </Fragment>
+      )}
 
       <h2>Notes</h2>
       <div>
