@@ -6,17 +6,20 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
     "react-scripts": "3.4.3",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "json-server -p3001 --watch db.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -34,6 +37,8 @@
     ]
   },
   "devDependencies": {
-    "deep-freeze": "0.0.1"
+    "deep-freeze": "0.0.1",
+    "json-server": "^0.16.1",
+    "redux-devtools-extension": "^2.13.8"
   }
 }
