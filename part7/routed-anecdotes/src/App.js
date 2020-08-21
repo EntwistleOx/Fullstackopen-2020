@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from 'react';
-
 import {
   Route,
   Switch,
@@ -7,6 +6,8 @@ import {
   useRouteMatch,
   useHistory,
 } from 'react-router-dom';
+
+import { useField } from './hooks';
 
 const Menu = () => {
   const padding = {
@@ -86,18 +87,32 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
-  const [info, setInfo] = useState('');
+  const content = useField('text');
+  const { ...contentNoReset } = content;
+  delete contentNoReset.reset;
+
+  const author = useField('text');
+  const { ...authorNoReset } = author;
+  delete authorNoReset.reset;
+
+  const info = useField('text');
+  const { ...infoNoReset } = info;
+  delete infoNoReset.reset;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     });
+  };
+
+  const handleReset = () => {
+    content.reset();
+    author.reset();
+    info.reset();
   };
 
   return (
@@ -106,30 +121,19 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input
-            name='content'
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+          <input {...contentNoReset} />
         </div>
         <div>
           author
-          <input
-            name='author'
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
+          <input {...authorNoReset} />
         </div>
         <div>
           url for more info
-          <input
-            name='info'
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
-          />
+          <input {...infoNoReset} />
         </div>
         <button>create</button>
       </form>
+      <button onClick={handleReset}>reset</button>
     </div>
   );
 };
@@ -188,14 +192,11 @@ const App = () => {
     ? anecdotes.find((anecdote) => anecdote.id === match.params.id)
     : null;
 
-  console.log('==>', anecdote);
-
   return (
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
       <Notification msg={notification} />
-
       <Switch>
         <Route exact path='/'>
           <AnecdoteList anecdotes={anecdotes} />
@@ -210,7 +211,6 @@ const App = () => {
           <About />
         </Route>
       </Switch>
-
       <Footer />
     </div>
   );
