@@ -33,7 +33,7 @@ const App = () => {
       <Display counter={counter} />
       <Button handleClick={increase} text={'plus'} />
       <Button handleClick={decrease} text={'minus'} />
-      <Button handleClick={clear} text={'crear'} />
+      <Button handleClick={clear} text={'clear'} />
     </>
   );
 };
@@ -42,7 +42,7 @@ ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // const App = (props) => {
