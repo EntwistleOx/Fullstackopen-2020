@@ -9,7 +9,7 @@
 - [x] Part 4: Testing Express servers, user administration (22 exercises / 19 hours)
 - [x] Part 5: Testing React apps (22 exercises / 20 hours)
 - [x] Part 6: State management with Redux (21 exercises / 10 hours)
-- [ ] Part 7: React router, custom hooks, styling app with CSS and webpack
+- [x] Part 7: React router, custom hooks, styling app with CSS and webpack (21 exercises / 20 hours)
 - [ ] Part 8: GraphQL
 - [ ] Part 9: Typescript
 - [ ] Part 10: React Native
