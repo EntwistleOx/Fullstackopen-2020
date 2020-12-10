@@ -4,13 +4,17 @@
   "description": "phonebook with GraphQL",
   "main": "index.js",
   "scripts": {
-    "dev": "node index.js"
+    "dev": "nodemon index.js"
   },
   "author": "Juan Díaz",
   "license": "ISC",
   "dependencies": {
     "apollo-server": "^2.19.0",
     "graphql": "^15.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.4",
+    "mongoose-unique-validator": "^2.0.3",
+    "nodemon": "^2.0.6",
     "uuid": "^8.3.1"
   }
 }

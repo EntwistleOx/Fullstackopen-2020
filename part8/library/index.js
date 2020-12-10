@@ -159,15 +159,14 @@ const resolvers = {
   Query: {
     authorCount: () => Author.collection.countDocuments(),
     bookCount: () => Book.collection.countDocuments(),
-    allBooks: (root, args) => Book.find({}),
-    //if (args.author && args.genre) {
-    //return books.filter(
-    //(b) => b.author === args.author && b.genres.includes(args.genre)
-    //);
-    //} else {
-    //return books;
-    //}
-    //},
+    allBooks: (root, args) => {
+      console.log(args);
+      if (args.genre) {
+        return Book.find({ genres: args.genre }).populate("author");
+      } else {
+        return Book.find({}).populate("author");
+      }
+    },
     allAuthors: () => Author.find({}),
     me: (root, args, context) => {
       return context.currentUser;
@@ -207,7 +206,7 @@ const resolvers = {
       //books = books.concat(book);
       //return book;
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
       const author = await Author.findOne({ name: args.name });
 
       const currentUser = context.currentUser;
