@@ -1,22 +1,19 @@
 import { Fragment, useState, useEffect } from "react";
-import { useQuery, useLazyQuery, useApolloClient } from "@apollo/client";
+import {
+  useQuery,
+  useLazyQuery,
+  useApolloClient,
+  useSubscription,
+} from "@apollo/client";
 import Login from "./components/Login";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import BooksForm from "./components/BooksForm";
 import BornForm from "./components/BornForm";
 import Recommendations from "./components/Recommendations";
-import { ALL_AUTHORS, ALL_BOOKS, ME } from "./queries";
+import { ALL_AUTHORS, ALL_BOOKS, ME, BOOK_ADDED } from "./queries";
 
-function App() {
-  const authors = useQuery(ALL_AUTHORS);
-  const books = useQuery(ALL_BOOKS);
-  const me = useQuery(ME);
-  const [getBooks, result] = useLazyQuery(ALL_BOOKS, {
-    fetchPolicy: "network-only",
-  });
-  const client = useApolloClient();
-
+const App = () => {
   const [recommended, setRecommended] = useState(null);
   const [token, setToken] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
@@ -24,6 +21,13 @@ function App() {
   const [showBooks, setShowBooks] = useState(false);
   const [showBookForm, setShowBookForm] = useState(false);
   const [showRecommendations, setShowRecommendations] = useState(false);
+  const authors = useQuery(ALL_AUTHORS);
+  const books = useQuery(ALL_BOOKS);
+  const me = useQuery(ME);
+  const [getBooks, result] = useLazyQuery(ALL_BOOKS, {
+    fetchPolicy: "network-only",
+  });
+  const client = useApolloClient();
 
   useEffect(() => {
     const token = localStorage.getItem("user-token");
@@ -41,6 +45,41 @@ function App() {
   const fetchRecommended = (genre) => {
     getBooks({ variables: { genre } });
   };
+
+  const updateCache = (added) => {
+    const booksIn = (set, obj) => set.map((b) => b.id).includes(obj.id);
+    const authorsIn = (set, obj) =>
+      set.map((a) => a.id).includes(obj.author.id);
+
+    const booksInStore = client.readQuery({ query: ALL_BOOKS });
+    const authorsInStore = client.readQuery({ query: ALL_AUTHORS });
+
+    console.log(booksInStore);
+    console.log(authorsInStore);
+    console.log(added);
+
+    if (!booksIn(booksInStore.allBooks, added)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: booksInStore.allBooks.concat(added) },
+      });
+    }
+
+    if (!authorsIn(authorsInStore.allAuthors, added)) {
+      client.writeQuery({
+        query: ALL_AUTHORS,
+        data: { allAuthors: authorsInStore.allAuthors.concat(added.author) },
+      });
+    }
+  };
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const added = subscriptionData.data.bookAdded;
+      alert(`${added.title} added`);
+      updateCache(added);
+    },
+  });
 
   if (authors.loading) {
     return <div>loading...</div>;
@@ -137,7 +176,7 @@ function App() {
         </Fragment>
       )}
       {showBooks && <Books books={books.data.allBooks} />}
-      {showBookForm && <BooksForm />}
+      {showBookForm && <BooksForm updateCache={updateCache} />}
       {showRecommendations && (
         <Recommendations books={recommended} genre={me.data.me.favoriteGenre} />
       )}
@@ -150,6 +189,6 @@ function App() {
       )}
     </Fragment>
   );
-}
+};
 
 export default App;

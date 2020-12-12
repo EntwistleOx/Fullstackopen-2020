@@ -3,9 +3,11 @@ const {
   UserInputError,
   gql,
   AuthenticationError,
+  PubSub,
 } = require("apollo-server");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const pubsub = new PubSub();
 
 const Book = require("./models/Book");
 const Author = require("./models/Author");
@@ -16,6 +18,7 @@ const MONGODB_URI =
 
 const JWT_SECRET = "MY-SECRET-666";
 
+//mongoose.set("debug", true);
 mongoose
   .connect(MONGODB_URI, {
     useNewUrlParser: true,
@@ -153,6 +156,10 @@ const typeDefs = gql`
     createUser(username: String!, favoriteGenre: String!): User
     login(username: String!, password: String!): Token
   }
+
+  type Subscription {
+    bookAdded: Book!
+  }
 `;
 
 const resolvers = {
@@ -160,7 +167,6 @@ const resolvers = {
     authorCount: () => Author.collection.countDocuments(),
     bookCount: () => Book.collection.countDocuments(),
     allBooks: (root, args) => {
-      console.log(args);
       if (args.genre) {
         return Book.find({ genres: args.genre }).populate("author");
       } else {
@@ -185,11 +191,13 @@ const resolvers = {
       try {
         const author = await Author.findOne({ name: args.author });
         if (!author) {
-          const newAuthor = new Author({ name: args.author });
+          const newAuthor = new Author({ name: args.author, bookCount: 1 });
           await newAuthor.save();
           book.author = newAuthor;
         } else {
           book.author = author;
+          author.bookCount = author.bookCount + 1;
+          await author.save();
         }
         await book.save();
       } catch (error) {
@@ -197,6 +205,7 @@ const resolvers = {
           invalidArgs: args,
         });
       }
+      pubsub.publish("BOOK_ADDED", { bookAdded: book });
       return book;
       //if (!authors.find((a) => a.name === args.author)) {
       //const author = { name: args.author, id: uuid() };
@@ -259,8 +268,13 @@ const resolvers = {
       return { value: jwt.sign(userForToken, JWT_SECRET) };
     },
   },
-  Author: {
-    bookCount: async (root) => await Book.countDocuments({ author: root._id }),
+  //Author: {
+  //bookCount: async (root) => await Book.countDocuments({ author: root._id }),
+  //},
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"]),
+    },
   },
 };
 

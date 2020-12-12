@@ -21,6 +21,12 @@ const schema = new mongoose.Schema({
     required: true,
     minlength: 3,
   },
+  friendOf: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
 });
 
 module.exports = mongoose.model("Person", schema);

@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ALL_BOOKS, ALL_AUTHORS, CREATE_BOOK } from "../queries";
 
-const BooksForm = () => {
+const BooksForm = ({ updateCache }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState("");
@@ -14,16 +14,19 @@ const BooksForm = () => {
     onError: (error) => {
       console.log(error.graphQLErrors);
     },
-    update: (store, response) => {
-      const dataInStore = store.readQuery({ query: ALL_BOOKS });
-      store.writeQuery({
-        query: ALL_BOOKS,
-        data: {
-          ...dataInStore,
-          allBooks: [...dataInStore.allBooks, response.data.addBook],
-        },
-      });
-    },
+    //update: (store, response) => {
+    //updateCache(response.data.addBook);
+    //},
+    //update: (store, response) => {
+    //const dataInStore = store.readQuery({ query: ALL_BOOKS });
+    //store.writeQuery({
+    //query: ALL_BOOKS,
+    //data: {
+    //...dataInStore,
+    //allBooks: [...dataInStore.allBooks, response.data.addBook],
+    //},
+    //});
+    //},
   });
 
   const handleSubmit = async (e) => {

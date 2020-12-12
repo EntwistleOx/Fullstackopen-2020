@@ -2,27 +2,29 @@ import { Fragment, useState } from "react";
 import { useMutation } from "@apollo/client";
 import { ALL_PERSONS, CREATE_PERSON } from "../queries";
 
-const PersonForm = ({ setError }) => {
+const PersonForm = ({ setError, updateCacheWith }) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
 
   const [createPerson] = useMutation(CREATE_PERSON, {
-    //refetchQueries: [{ query: ALL_PERSONS }],
     onError: (error) => {
       setError(error.graphQLErrors[0].message);
     },
     update: (store, response) => {
-      const dataInStore = store.readQuery({ query: ALL_PERSONS });
-      store.writeQuery({
-        query: ALL_PERSONS,
-        data: {
-          ...dataInStore,
-          allPersons: [...dataInStore.allPersons, response.data.allPersons],
-        },
-      });
+      updateCacheWith(response.data.addPerson);
     },
+    //update: (store, response) => {
+    //const dataInStore = store.readQuery({ query: ALL_PERSONS });
+    //store.writeQuery({
+    //query: ALL_PERSONS,
+    //data: {
+    //...dataInStore,
+    //allPersons: [...dataInStore.allPersons, response.data.allPersons],
+    //},
+    //});
+    //},
   });
 
   const submit = (e) => {
