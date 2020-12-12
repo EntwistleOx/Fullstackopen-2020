@@ -10,6 +10,5 @@
 - [x] Part 5: Testing React apps (22 exercises / 20 hours)
 - [x] Part 6: State management with Redux (21 exercises / 10 hours)
 - [x] Part 7: React router, custom hooks, styling app with CSS and webpack (21 exercises / 20 hours)
-- [ ] Part 8: GraphQL
+- [x] Part 8: GraphQL (26 exercises / 25 hours)
 - [ ] Part 9: Typescript
-- [ ] Part 10: React Native
