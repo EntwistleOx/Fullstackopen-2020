@@ -54,10 +54,6 @@ const App = () => {
     const booksInStore = client.readQuery({ query: ALL_BOOKS });
     const authorsInStore = client.readQuery({ query: ALL_AUTHORS });
 
-    console.log(booksInStore);
-    console.log(authorsInStore);
-    console.log(added);
-
     if (!booksIn(booksInStore.allBooks, added)) {
       client.writeQuery({
         query: ALL_BOOKS,
