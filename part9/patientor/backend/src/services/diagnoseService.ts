@@ -1,6 +1,6 @@
-import data from "../../data/diagnoses.json";
+import data from '../../data/diagnoses.json';
 
-import { DiagnoseEntry } from "../../types";
+import { DiagnoseEntry } from '../../types';
 
 const diagnoses: Array<DiagnoseEntry> = data;
 
