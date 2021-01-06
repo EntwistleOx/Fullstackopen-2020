@@ -1,19 +1,10 @@
-import uuid = require('uuid');
-import patients from '../../data/patients';
+import uuid = require("uuid");
+import patients from "../../data/patients";
 
-import { Patient, PublicPatient, NewPatientEntry } from '../../types';
+import { Patient, NewPatientEntry, NewEntry } from "../../types";
 
-// const patients: Array<PublicPatient> = data;
-// const patientsEntries: Array<Patient> = data;
-
-const getPatient = (): PublicPatient[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
-    id,
-    name,
-    dateOfBirth,
-    gender,
-    occupation,
-  }));
+const getPatients = (): Patient[] => {
+  return patients;
 };
 
 const getPatientById = (id: string): Patient | undefined => {
@@ -30,4 +21,20 @@ const addPatient = (entry: NewPatientEntry): Patient => {
   return newPatient;
 };
 
-export default { getPatient, addPatient, getPatientById };
+const addEntry = (id: string, entry: NewEntry): Patient | undefined => {
+  const patient = patients.find((search) => search.id === id);
+
+  if (patient) {
+    const newEntry = {
+      id: uuid.v4(),
+      ...entry,
+    };
+    patient.entries.push(newEntry);
+    //return newEntry;
+    return patient;
+  }
+
+  return undefined;
+};
+
+export default { getPatients, addPatient, getPatientById, addEntry };
