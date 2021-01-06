@@ -12,3 +12,8 @@
 - [x] Part 7: React router, custom hooks, styling app with CSS and webpack (21 exercises / 20 hours)
 - [x] Part 8: GraphQL (26 exercises / 25 hours)
 - [x] Part 9: Typescript (27 exercises / 30 hours)
+
+![Certificate](./certificate-fullstack.png)
+
+Certificate link: 
+https://studies.cs.helsinki.fi/stats/api/certificate/fullstackopen/en/6cbc6553fc8e3feb9a43ba0b1066db1f
